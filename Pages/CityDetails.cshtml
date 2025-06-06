@@ -1,0 +1,144 @@
+﻿@page "{name?}"
+@using CityBreaks.Web.Pages
+@model CityDetailsModel
+@{
+    ViewData["Title"] = Model.City != null ? $"Detalhes de {Model.City.Name}" : "Cidade não encontrada";
+}
+
+<div class="container mt-4">
+    @if (Model.City != null)
+    {
+        <div class="row mb-4">
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a asp-page="/Index">Início</a></li>
+                        <li class="breadcrumb-item active">@Model.City.Name</li>
+                    </ol>
+                </nav>
+
+                <div class="jumbotron bg-primary text-white p-4 rounded">
+                    <h1 class="display-4">🏙️ @Model.City.Name</h1>
+                    <p class="lead">
+                        📍 @Model.City.Country.CountryName (@Model.City.Country.CountryCode)
+                    </p>
+                    <hr class="my-4 bg-white">
+                    <p class="mb-0">
+                        <strong>@Model.City.Properties.Count</strong> propriedades disponíveis para sua estadia
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        @if (Model.City.Properties.Any())
+        {
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="mb-4">🏨 Propriedades Disponíveis</h2>
+                </div>
+            </div>
+
+            <div class="row">
+                @foreach (var property in Model.City.Properties.OrderBy(p => p.PricePerNight))
+                {
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">@property.Name</h5>
+                                <span class="badge bg-success fs-6">
+                                    R$ @property.PricePerNight.ToString("F2")
+                                </span>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">
+                                    <small class="text-muted">📍 @Model.City.Name, @Model.City.Country.CountryName</small>
+                                </p>
+                                <p class="card-text">
+                                    <strong>Preço por noite:</strong> R$ @property.PricePerNight.ToString("F2")
+                                </p>
+
+                                @{
+                                    var categoria = property.PricePerNight switch
+                                    {
+                                        <= 200m => "💰 Econômico",
+                                        <= 500m => "💎 Padrão",
+                                        <= 1000m => "⭐ Premium",
+                                        _ => "👑 Luxo"
+                                    };
+                                }
+
+                                <span class="badge bg-secondary">@categoria</span>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-primary btn-sm w-100">
+                                    📅 Reservar agora
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="row mt-5">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>📊 Estatísticas de @Model.City.Name</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row text-center">
+                                <div class="col-md-3">
+                                    <h4 class="text-primary">@Model.City.Properties.Count</h4>
+                                    <small class="text-muted">Propriedades</small>
+                                </div>
+                                <div class="col-md-3">
+                                    <h4 class="text-success">R$ @Model.City.Properties.Min(p => p.PricePerNight).ToString("F2")</h4>
+                                    <small class="text-muted">Preço mínimo</small>
+                                </div>
+                                <div class="col-md-3">
+                                    <h4 class="text-danger">R$ @Model.City.Properties.Max(p => p.PricePerNight).ToString("F2")</h4>
+                                    <small class="text-muted">Preço máximo</small>
+                                </div>
+                                <div class="col-md-3">
+                                    <h4 class="text-info">R$ @Model.City.Properties.Average(p => p.PricePerNight).ToString("F2")</h4>
+                                    <small class="text-muted">Preço médio</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-warning">
+                <h4>🏨 Nenhuma propriedade disponível</h4>
+                <p>Infelizmente não temos propriedades cadastradas para <strong>@Model.City.Name</strong> no momento.</p>
+            </div>
+        }
+    }
+    else
+    {
+
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-danger">
+                    <h4>🔍 Cidade não encontrada</h4>
+                    <p>Não conseguimos encontrar informações sobre a cidade <strong>"@Model.SearchedName"</strong>.</p>
+                    <hr>
+                    <a asp-page="/Index" class="btn btn-primary">
+                        ⬅️ Voltar para a lista de cidades
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <a asp-page="/Index" class="btn btn-outline-secondary">
+                ⬅️ Voltar para todas as cidades
+            </a>
+        </div>
+    </div>
+</div>
