@@ -24,6 +24,40 @@ namespace CityBreaks.Web.Data.Configurations
                 .WithOne(city => city.Country)
                 .HasForeignKey(city => city.CountryId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+
+            builder.HasData(
+                new Country
+                {
+                    Id = 1,
+                    CountryCode = "BR",
+                    CountryName = "Brasil"
+                },
+                new Country
+                {
+                    Id = 2,
+                    CountryCode = "US",
+                    CountryName = "Estados Unidos"
+                },
+                new Country
+                {
+                    Id = 3,
+                    CountryCode = "FR",
+                    CountryName = "França"
+                },
+                new Country
+                {
+                    Id = 4,
+                    CountryCode = "IT",
+                    CountryName = "Itália"
+                },
+                new Country
+                {
+                    Id = 5,
+                    CountryCode = "ES",
+                    CountryName = "Espanha"
+                }
+            );
         }
     }
 }

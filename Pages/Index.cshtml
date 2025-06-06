@@ -1,10 +1,76 @@
 ﻿@page
+@using CityBreaks.Web.Pages
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "CityBreaks - Destinos Turísticos";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="display-4 text-center mb-5">🌍 CityBreaks - Destinos Turísticos</h1>
+
+            @if (Model.Cities.Any())
+            {
+                <div class="row">
+                    @foreach (var city in Model.Cities)
+                    {
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="card-title mb-0">
+                                        🏙️ @city.Name
+                                    </h5>
+                                    <small>📍 @city.Country.CountryName</small>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text">
+                                        <strong>País:</strong> @city.Country.CountryName (@city.Country.CountryCode)
+                                    </p>
+                                    <p class="card-text">
+                                        <strong>Propriedades disponíveis:</strong> @city.Properties.Count
+                                    </p>
+
+                                    @if (city.Properties.Any())
+                                    {
+                                        <h6 class="mt-3">🏨 Propriedades:</h6>
+                                        <ul class="list-group list-group-flush">
+                                            @foreach (var property in city.Properties.Take(3))
+                                            {
+                                                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                                    <span>@property.Name</span>
+                                                    <span class="badge bg-success rounded-pill">
+                                                        R$ @property.PricePerNight.ToString("F2")/noite
+                                                    </span>
+                                                </li>
+                                            }
+                                        </ul>
+
+                                        @if (city.Properties.Count > 3)
+                                        {
+                                            <small class="text-muted">
+                                                ... e mais @(city.Properties.Count - 3) propriedade(s)
+                                            </small>
+                                        }
+                                    }
+                                </div>
+                                <div class="card-footer">
+                                    <a href="#" class="btn btn-outline-primary btn-sm">
+                                        Ver detalhes da cidade
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info text-center">
+                    <h4>🏝️ Nenhuma cidade encontrada</h4>
+                    <p>Parece que ainda não temos destinos cadastrados.</p>
+                </div>
+            }
+        </div>
+    </div>
 </div>
