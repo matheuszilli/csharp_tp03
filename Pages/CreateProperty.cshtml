@@ -1,0 +1,103 @@
+﻿@page
+@using CityBreaks.Web.Pages
+@model CreatePropertyModel
+@{
+    ViewData["Title"] = "Cadastrar Nova Propriedade";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0">🏨 Cadastrar Nova Propriedade</h3>
+                </div>
+                <div class="card-body">
+                    <nav aria-label="breadcrumb" class="mb-4">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a asp-page="/Index">Início</a></li>
+                            <li class="breadcrumb-item active">Cadastrar Propriedade</li>
+                        </ol>
+                    </nav>
+
+                    <form method="post">
+                        <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="Property.Name" class="form-label">
+                                <strong>Nome da Propriedade</strong>
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="Property.Name"
+                                   class="form-control"
+                                   placeholder="Ex: Hotel Vista Mar, Pousada Central, Apartamento Copacabana..."
+                                   maxlength="200" />
+                            <span asp-validation-for="Property.Name" class="text-danger"></span>
+                            <div class="form-text">Máximo 200 caracteres</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Property.PricePerNight" class="form-label">
+                                <strong>Preço por Noite (R$)</strong>
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">R$</span>
+                                <input asp-for="Property.PricePerNight"
+                                       class="form-control"
+                                       type="number"
+                                       step="0.01"
+                                       min="0"
+                                       placeholder="150.00" />
+                            </div>
+                            <span asp-validation-for="Property.PricePerNight" class="text-danger"></span>
+                            <div class="form-text">Use ponto (.) para casas decimais. Ex: 150.50</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Property.CityId" class="form-label">
+                                <strong>Cidade</strong>
+                                <span class="text-danger">*</span>
+                            </label>
+                            <select asp-for="Property.CityId"
+                                    asp-items="Model.CitiesSelectList"
+                                    class="form-select">
+                                <option value="">-- Selecione uma cidade --</option>
+                            </select>
+                            <span asp-validation-for="Property.CityId" class="text-danger"></span>
+                            <div class="form-text">Escolha a cidade onde a propriedade está localizada</div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a asp-page="/Index" class="btn btn-outline-secondary me-md-2">
+                                ❌ Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                ✅ Cadastrar Propriedade
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0">💡 Dicas</h6>
+                    </div>
+                    <div class="card-body">
+                        <ul class="mb-0">
+                            <li><strong>Nome:</strong> Use um nome descritivo e atrativo</li>
+                            <li><strong>Preço:</strong> Considere a localização e qualidade do imóvel</li>
+                            <li><strong>Cidade:</strong> A propriedade será listada nos detalhes da cidade escolhida</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
